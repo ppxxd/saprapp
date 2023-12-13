@@ -1,14 +1,12 @@
 package krutskikh.service;
 
+import krutskikh.calculation.CalculationFile;
 import krutskikh.component.Bar;
 import krutskikh.component.Construction;
 import krutskikh.component.Joint;
 import lombok.Getter;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +22,25 @@ public class MainService {
         catch(Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void save(CalculationFile calculationFile, File file) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write("Перемещения: " + calculationFile.getMoving() + "\n");
+            writer.write("Продольные силы:" + calculationFile.getLongitudinalStrong() + "\n");
+            writer.write("Нормальные напряжения:" + calculationFile.getNormalVoltage() + "\n");
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+//        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path)))
+//        {
+//            oos.writeObject(calculationFile);
+//        }
+//        catch(Exception ex) {
+//            System.out.println(ex.getMessage());
+//        }
     }
 
     public Construction load() {

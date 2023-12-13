@@ -82,4 +82,5 @@ public class Joint extends GridPane implements Serializable {
     public void setJointId(Integer jointId) {
         this.jointId = jointId;
     }
+
 }

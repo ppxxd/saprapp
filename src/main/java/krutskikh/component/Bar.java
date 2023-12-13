@@ -62,7 +62,7 @@ public class Bar extends GridPane implements Serializable {
         this.add(getInputLabel("Модуль упругости E"), 4, 0);
         this.add(EInput, 4, 1);
 
-        this.add(getInputLabel("Сигма σ"), 5, 0);
+        this.add(getInputLabel("Доп. напряжение σ"), 5, 0);
         this.add(sigmaInput, 5, 1);
 
         //delete

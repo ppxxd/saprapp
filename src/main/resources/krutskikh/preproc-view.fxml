@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="krutskikh.controller.PreprocController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="krutskikh.controller.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -44,7 +44,8 @@
                                           <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="90.0" spacing="10.0" HBox.hgrow="NEVER">
                                              <children>
                                                 <Button mnemonicParsing="false" onAction="#addBar" text="Добавить" textAlignment="CENTER" />
-                                                <Button mnemonicParsing="false" onAction="#clearConstruction" text="Очистить" />
+                                                <Button mnemonicParsing="false" onAction="#clearConstruction" text="Очистить" textAlignment="CENTER" />
+<!--                                                <Button mnemonicParsing="false" onAction="#doCalculation" text="Расчёт" textAlignment="CENTER" />-->
                                                  <Text text="Заделки"></Text>
                                                  <CheckBox fx:id="leftSupportBox" mnemonicParsing="false" onAction="#setLeftSupport" text="Слева" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"></CheckBox>
                                                  <CheckBox fx:id="rightSupportBox" mnemonicParsing="false" onAction="#setRightSupport" text="Справа" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.valignment="CENTER"></CheckBox>
@@ -66,6 +67,28 @@
                                                 </ScrollPane>
                                             </children>
                                         </AnchorPane>
+                                    </content>
+                                </Tab>
+                                <Tab text="Расчёт">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                            <children>
+                                                <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <children>
+                                                        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="268.0" prefWidth="598.0" HBox.hgrow="ALWAYS">
+                                                            <content>
+                                                                <VBox fx:id="calcHolder" alignment="TOP_CENTER" prefHeight="149.0" prefWidth="456.0" spacing="5.0" />
+                                                            </content>
+                                                        </ScrollPane>
+                                                        <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="90.0" spacing="10.0" HBox.hgrow="NEVER">
+                                                            <children>
+                                                                <Button mnemonicParsing="false" onAction="#doCalculation" text="Расчёт" textAlignment="CENTER"/>
+                                                                <Button mnemonicParsing="false" onAction="#saveCalculation" text="Сохранить" textAlignment="CENTER"/>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children></AnchorPane>
                                     </content>
                                 </Tab>
                             </tabs>
