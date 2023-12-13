@@ -97,8 +97,8 @@ public class PreprocController implements Initializable {
         File file = fileChooser.showOpenDialog(root.getScene().getWindow());
         service.setPath(file.getAbsolutePath());
 
-        if (barHolder.getChildren() != null) {
-            barHolder.getChildren().clear();
+        if (service.getPath() != null) {
+            clearConstruction();
         }
         construction = service.load();
         barHolder.getChildren().addAll(construction.getBars());
@@ -120,6 +120,12 @@ public class PreprocController implements Initializable {
 
         barHolder.getChildren().clear();
         jointHolder.getChildren().clear();
+//        if (leftSupportBox.isSelected()) { //clearing out checkboxes
+//            leftSupportBox.fire();
+//        }
+        if (rightSupportBox.isSelected()) {
+            rightSupportBox.fire();
+        }
         construction = new Construction();
 
         draw();

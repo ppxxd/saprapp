@@ -7,7 +7,6 @@
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="krutskikh.controller.PreprocController">
     <top>
-<!--MAKE SCENE NAME -->
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="Файл">
@@ -48,7 +47,7 @@
                                                 <Button mnemonicParsing="false" onAction="#clearConstruction" text="Очистить" />
                                                  <Text text="Заделки"></Text>
                                                  <CheckBox fx:id="leftSupportBox" mnemonicParsing="false" onAction="#setLeftSupport" text="Слева" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"></CheckBox>
-                                                 <CheckBox fx:id="rightSupportBox" mnemonicParsing="false" onAction="#setRightSupport" text="Справа" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"></CheckBox>
+                                                 <CheckBox fx:id="rightSupportBox" mnemonicParsing="false" onAction="#setRightSupport" text="Справа" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.valignment="CENTER"></CheckBox>
                                              </children>
                                           </VBox>
                                        </children>

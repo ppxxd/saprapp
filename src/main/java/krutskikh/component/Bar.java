@@ -25,6 +25,8 @@ public class Bar extends GridPane implements Serializable {
     private Double Q = 0d; //Продольная сила
     @Getter
     private Double E = 0d; //Сила упругости
+    @Getter
+    private Double sigma = 0d; //Сигма
 
     @Getter
     private Joint leftJoint; //Левая заделка
@@ -37,6 +39,7 @@ public class Bar extends GridPane implements Serializable {
     private transient final TextField AInput = getInputTextField(this::setA, (value) -> value > 0, "A");
     private transient final TextField QInput = getInputTextField(this::setQ, (value) -> isNumeric(String.valueOf(value)), "Q"); //TODO check if double
     private transient final TextField EInput = getInputTextField(this::setE, (value) -> value > 0, "E");
+    private transient final TextField sigmaInput = getInputTextField(this::setSigma, (value) -> value > 0, "sigma");
 
     public Bar() {
         super();
@@ -59,6 +62,9 @@ public class Bar extends GridPane implements Serializable {
         this.add(getInputLabel("Модуль упругости E"), 4, 0);
         this.add(EInput, 4, 1);
 
+        this.add(getInputLabel("Сигма σ"), 5, 0);
+        this.add(sigmaInput, 5, 1);
+
         //delete
         this.autosize();
         generateBarId();
@@ -76,6 +82,7 @@ public class Bar extends GridPane implements Serializable {
         this.AInput.setText(String.valueOf(this.A));
         this.QInput.setText(String.valueOf(this.Q));
         this.EInput.setText(String.valueOf(this.E));
+        this.sigmaInput.setText(String.valueOf(this.sigma));
     }
 
     private TextField getInputTextField(Consumer<Double> consumer, Function<Double, Boolean> function, String fieldName) {
@@ -140,8 +147,16 @@ public class Bar extends GridPane implements Serializable {
         this.leftJoint = leftJoint;
     }
 
+    public Double getSigma() {
+        return sigma;
+    }
+
     public void setRightJoint(Joint rightJoint) {
         this.rightJoint = rightJoint;
+    }
+
+    public void setSigma(Double sigma) {
+        this.sigma = sigma;
     }
 
     @Override

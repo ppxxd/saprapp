@@ -101,22 +101,23 @@ public class Drawer {
 
     private void drawDistributedWeight(GraphicsContext context, Double weight, Double length, Double x, Double y) {  //Q
         context.setStroke(Color.NAVY);
-        double end = x + length;
 
+        //drawDistributedWeight(context, bar.getQ(), bar.getL() * baseLength, startX, startY);
+        double end = x + length;
         if (weight.isNaN() || weight.equals(0d)) {
             return;
         } else if (weight < 0) {
-
+            //System.out.println(x + " " + length + " " + end);
             while (x < end) {
-                double endX = x - 10;
-                context.strokeLine(x, y, endX, y);
+                double endX = x;
+                context.strokeLine(x + 10, y, endX, y);
                 context.strokeLine(endX, y, endX + 2, y + 2);
                 context.strokeLine(endX, y, endX + 2, y - 2);
 
                 x += 15;
             }
-
         } else {
+           // System.out.println(x + " " + length + " " + end);
             while (x < end) {
                 double endX = x + 10;
                 context.strokeLine(x, y, endX, y);

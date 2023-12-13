@@ -58,6 +58,7 @@ public class MainService {
             res.setA(bar.getA());
             res.setQ(bar.getQ());
             res.setE(bar.getE());
+            res.setSigma(bar.getSigma());
             res.recalculateInputs();
 
             res.setLeftJoint(newJoints.stream()
