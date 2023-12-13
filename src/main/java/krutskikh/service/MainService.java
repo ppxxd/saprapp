@@ -1,6 +1,5 @@
 package krutskikh.service;
 
-import krutskikh.calculation.CalculationFile;
 import krutskikh.component.Bar;
 import krutskikh.component.Construction;
 import krutskikh.component.Joint;
@@ -24,16 +23,16 @@ public class MainService {
         }
     }
 
-    public void save(CalculationFile calculationFile, File file) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write("Перемещения: " + calculationFile.getMoving() + "\n");
-            writer.write("Продольные силы:" + calculationFile.getLongitudinalStrong() + "\n");
-            writer.write("Нормальные напряжения:" + calculationFile.getNormalVoltage() + "\n");
-            writer.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+    public void save(String calculationFile, File file) {
+//        try {
+//            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+//            writer.write("Перемещения: " + calculationFile.getMoving() + "\n");
+//            writer.write("Продольные силы:" + calculationFile.getLongitudinalStrong() + "\n");
+//            writer.write("Нормальные напряжения:" + calculationFile.getNormalVoltage() + "\n");
+//            writer.close();
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//        }
 //        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path)))
 //        {
 //            oos.writeObject(calculationFile);

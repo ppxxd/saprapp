@@ -1,34 +1,49 @@
 package krutskikh.calculation;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class CalculatorResult {
-    private double movement;
     private double x;
-    private double longitudinalForce;
-    private double normalVoltage;
+    private double sigma;
+    private double NX;
+    private double UX;
 
-    public CalculatorResult() {
-        this(0, 0, 0, 0);
-    }
-
-    public CalculatorResult(double x, double movement, double longitudinalForce, double normalVoltage) {
+    public CalculatorResult(double x, double sigma, double NX, double UX) {
         this.x = x;
-        this.movement = movement;
-        this.longitudinalForce = longitudinalForce;
-        this.normalVoltage = normalVoltage;
+        this.sigma = sigma;
+        this.NX = NX;
+        this.UX = UX;
     }
 
-    @Override
-    public String toString() {
-        return "CalculatorResult{" +
-                "movement=" + movement +
-                ", x=" + x +
-                ", longitudinalForce=" + longitudinalForce +
-                ", normalVoltage=" + normalVoltage +
-                '}';
+    public void setX(double x) {
+        this.x = x;
     }
+
+    public void setSigma(double sigma) {
+        this.sigma = sigma;
+    }
+
+    public void setNX(double NX) {
+        this.NX = NX;
+    }
+
+    public void setUX(double UX) {
+        this.UX = UX;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getSigma() {
+        return sigma;
+    }
+
+    public double getNX() {
+        return NX;
+    }
+
+    public double getUX() {
+        return UX;
+    }
+
 }

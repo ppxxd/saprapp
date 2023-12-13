@@ -14,6 +14,7 @@ module krutskikh {
     opens krutskikh to javafx.fxml;
     exports krutskikh;
     exports krutskikh.controller;
+    opens krutskikh.calculation to javafx.base;
     opens krutskikh.controller to javafx.fxml;
     opens krutskikh.elements to javafx.fxml;
 }

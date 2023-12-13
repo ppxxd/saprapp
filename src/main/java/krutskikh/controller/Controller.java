@@ -1,30 +1,41 @@
 package krutskikh.controller;
 
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Window;
+import krutskikh.calculation.CalculatorResult;
+import krutskikh.calculation.Processor;
 import krutskikh.component.Bar;
 import krutskikh.component.Construction;
 import krutskikh.component.Joint;
 import krutskikh.service.Drawer;
+import krutskikh.calculation.Storage;
 import krutskikh.service.MainService;
-import krutskikh.calculation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.CheckBox;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-import org.apache.commons.math3.util.Precision;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 
 public class Controller implements Initializable {
+    @FXML
+    private TableView<CalculatorResult> resultsView;
+    @FXML
+    private TableColumn<CalculatorResult, Double> xValue, Nx, Ux, sigmaX;
+    @FXML
+    private TextField samplingStep, x, barIndexes;
     private final MainService service = new MainService();
     private final Drawer drawer = Drawer.getInstance();
     private final FileChooser fileChooser = new FileChooser();
     private Construction construction;
-
-    private CalculationFile calculationFile;
+    private final Storage storage = Storage.INSTANCE;
 
     @FXML
     private BorderPane root;
@@ -41,6 +52,17 @@ public class Controller implements Initializable {
     @FXML
     private CheckBox rightSupportBox;
 
+    private void initColumns() {
+        setCellValuesFactory();
+    }
+
+    private void setCellValuesFactory() {
+        xValue.setCellValueFactory(new PropertyValueFactory<>("x"));
+        Nx.setCellValueFactory(new PropertyValueFactory<>("NX"));
+        Ux.setCellValueFactory(new PropertyValueFactory<>("UX"));
+        sigmaX.setCellValueFactory(new PropertyValueFactory<>("sigma"));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AnchorPane pane = (AnchorPane) canvas.getParent();
@@ -54,6 +76,7 @@ public class Controller implements Initializable {
 
         leftSupportBox.setSelected(construction.getLeftSupport());
         rightSupportBox.setSelected(construction.getRightSupport());
+        initColumns();
     }
 
     @FXML
@@ -103,12 +126,15 @@ public class Controller implements Initializable {
 
         if (service.getPath() != null) {
             clearConstruction();
-        }
-        construction = service.load();
-        barHolder.getChildren().addAll(construction.getBars());
-        jointHolder.getChildren().addAll(construction.getJoints());
+            construction = service.load();
+            barHolder.getChildren().addAll(construction.getBars());
+            jointHolder.getChildren().addAll(construction.getJoints());
+            if (construction.getRightSupport()) { //TODO В ОТДЕЛЬНЫЙ МЕТОД
+                rightSupportBox.fire();
+            }
 
-        draw();
+            draw();
+        }
     }
 
     @FXML
@@ -124,9 +150,8 @@ public class Controller implements Initializable {
 
         barHolder.getChildren().clear();
         jointHolder.getChildren().clear();
-//        if (leftSupportBox.isSelected()) { //clearing out checkboxes
-//            leftSupportBox.fire();
-//        }
+        resultsView.getItems().clear();
+
         if (rightSupportBox.isSelected()) {
             rightSupportBox.fire();
         }
@@ -149,48 +174,65 @@ public class Controller implements Initializable {
 
     @FXML
     public void doCalculation() {
-        if (construction.getBars().isEmpty()) {
-            return;
-        }
-
-        Calculators calculators = new Calculators();
-        calculationFile = calculators.calculate(construction);
-        if (Objects.nonNull(calculationFile) && !calculationFile.isEmpty()) {
-            System.out.println(calculationFile);
-            System.out.println("Перемещения: " + calculationFile.getMoving());
-            System.out.println("Продольные силы:" + calculationFile.getLongitudinalStrong());
-            System.out.println("Нормальные напряжения:" + calculationFile.getNormalVoltage());
+        try {
+            double barindex = Double.parseDouble(barIndexes.getText());
+            double step = Double.parseDouble(samplingStep.getText());
+            int stepPrecision = getNumberPrecision(samplingStep.getText());
+            Processor processor = new Processor();
+            List<CalculatorResult> resultList = processor.calculate(construction, (int) barindex - 1, step, stepPrecision);
+            resultsView.getItems().clear();
+            resultsView.getItems().addAll(resultList);
+        } catch (Exception e) {
+            System.out.println("error:");
+            System.out.println(e.getMessage());
         }
         draw();
     }
 
     @FXML
     public void saveCalculation() {
-        if (calculationFile.isEmpty() || construction.getBars().isEmpty() || construction.getJoints().isEmpty()) {
-            return;
-        }
+//        if (calculationFile.isEmpty() || construction.getBars().isEmpty() || construction.getJoints().isEmpty()) {
+//            return;
+//        }
+//
+//        File file = fileChooser.showSaveDialog(root.getScene().getWindow());
+//        service.setPath(file.getAbsolutePath());
+//        service.save(calculationFile, file);
 
-        File file = fileChooser.showSaveDialog(root.getScene().getWindow());
-        service.setPath(file.getAbsolutePath());
-        service.save(calculationFile, file);
-
+        List<CalculatorResult> calculatorResults = resultsView.getItems();
+        save(calculatorResults);
     }
 
 
-//    public Optional<List<CalculatorResult>> calculate(int barIndex, String shiftStep, int precision, CalculationFile calculationFile) {
-//        try {
-//            double parsedStep = Double.parseDouble(shiftStep);
-//            int stepPrecision = 1;
-//            double barLength = construction.getBars().size();
-//            List<CalculatorResult> calculatorResults = new ArrayList<>();
-//            for (double x = 0.0; Precision.round(x, stepPrecision) <= barLength; x += parsedStep) {
-//                calculatorResults.add(calculator.calculate(Precision.round(x, stepPrecision), precision, barIndex - 1));
-//            }
-//            return Optional.of(calculatorResults);
-//        } catch (NumberFormatException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return Optional.empty();
-//    }
+    private int getNumberPrecision(String number) {
+        String[] dotSplit = number.split("\\.");
+        if (dotSplit.length == 1) {
+            return 0;
+        }
+        return dotSplit[1].length();
+    }
+
+    private String prepareResultsForSaving(List<CalculatorResult> results) {
+        StringJoiner joiner = new StringJoiner("\n");
+        joiner.add("x;Nx;Ux;∂x");
+        for (CalculatorResult result : results) {
+            String resultLine = result.getX() + ";" + result.getNX() + ";" + result.getUX() + ";" + result.getSigma();
+            joiner.add(resultLine);
+        }
+        return joiner.toString();
+    }
+
+    public void save(List<CalculatorResult> Result) {
+        File chosenFile = fileChooser.showSaveDialog(root.getScene().getWindow());
+        if (chosenFile == null) {
+            return;
+        }
+        try (BufferedWriter writer = Files.newBufferedWriter(chosenFile.toPath())) {
+            writer.write(prepareResultsForSaving(Result));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

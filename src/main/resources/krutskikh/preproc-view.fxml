@@ -78,12 +78,28 @@
                                                         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="268.0" prefWidth="598.0" HBox.hgrow="ALWAYS">
                                                             <content>
                                                                 <VBox fx:id="calcHolder" alignment="TOP_CENTER" prefHeight="149.0" prefWidth="456.0" spacing="5.0" />
+                                                                <TableView fx:id="resultsView" maxWidth="400">
+                                                                    <columnResizePolicy>
+                                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                                                    </columnResizePolicy>
+                                                                    <columns>
+                                                                        <TableColumn editable="false" sortable="false" text="x" fx:id="xValue"/>
+                                                                        <TableColumn fx:id="Nx" editable="false" sortable="false" text="Nx"/>
+                                                                        <TableColumn fx:id="Ux" editable="false" sortable="false" text="Ux"/>
+                                                                        <TableColumn fx:id="sigmaX" editable="flase" sortable="false" text="σx"/>
+                                                                    </columns>
+                                                                </TableView>
                                                             </content>
                                                         </ScrollPane>
                                                         <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="90.0" spacing="10.0" HBox.hgrow="NEVER">
                                                             <children>
                                                                 <Button mnemonicParsing="false" onAction="#doCalculation" text="Расчёт" textAlignment="CENTER"/>
                                                                 <Button mnemonicParsing="false" onAction="#saveCalculation" text="Сохранить" textAlignment="CENTER"/>
+                                                                <Text text="Стержень"></Text>
+                                                                <TextField fx:id="barIndexes"></TextField>
+                                                                <Text text="Шаг"></Text>
+                                                                <TextField fx:id="samplingStep"></TextField>
+<!--                                                                <Button mnemonicParsing="false" onAction="#processCalculation" text="Постпроцессор" textAlignment="CENTER"/>-->
                                                             </children>
                                                         </VBox>
                                                     </children>
