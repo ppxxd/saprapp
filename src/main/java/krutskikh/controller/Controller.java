@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import krutskikh.calculation.CalculationExceptionsHandler;
 import krutskikh.calculation.CalculatorResult;
 import krutskikh.calculation.Processor;
 import krutskikh.component.Bar;
@@ -40,6 +41,7 @@ public class Controller implements Initializable {
     private final Drawer drawer = Drawer.getInstance();
     private final FileChooser fileChooser = new FileChooser();
     private Construction construction;
+    private transient final CalculationExceptionsHandler calculationExceptionsHandler = CalculationExceptionsHandler.getInstance();
 
     @FXML
     private BorderPane root;
@@ -177,14 +179,15 @@ public class Controller implements Initializable {
     @FXML
     public void doCalculation() {
         try {
-            double barindex = Double.parseDouble(barIndexes.getText());
+            resultsView.getItems().clear();
+            calculationExceptionsHandler.doCalculationExceptionHandler(barIndexes.getText(), samplingStep.getText(), construction);
+            double barIndex = Double.parseDouble(barIndexes.getText());
             double step = Double.parseDouble(samplingStep.getText());
             int stepPrecision = getNumberPrecision(samplingStep.getText());
             Processor processor = new Processor();
-            List<CalculatorResult> resultList = processor.calculate(construction, (int) barindex - 1, step, stepPrecision);
-            resultsView.getItems().clear();
+            List<CalculatorResult> resultList = processor.calculate(construction, (int) barIndex - 1, step, stepPrecision);
             resultsView.getItems().addAll(resultList);
-        } catch (Exception e) {
+        } catch (Throwable  e) {
             System.out.println("error:");
             System.out.println(e.getMessage());
         }
@@ -225,6 +228,10 @@ public class Controller implements Initializable {
     }
 
     public void save(List<CalculatorResult> Result) {
+        if (Result.isEmpty()) {
+            calculationExceptionsHandler.saveResultsHandler();
+            return;
+        }
         File chosenFile = fileChooser.showSaveDialog(root.getScene().getWindow());
         if (chosenFile == null) {
             return;

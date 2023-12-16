@@ -1,5 +1,6 @@
 package krutskikh.component;
 
+import krutskikh.calculation.CalculationExceptionsHandler;
 import krutskikh.service.Drawer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -15,7 +16,6 @@ import java.util.function.Function;
 public class Joint extends GridPane implements Serializable {
     public static int JOINT_COUNT = 1;
     private transient final Drawer drawer = Drawer.getInstance();
-
     private transient final ExceptionHandler exceptionHandler = ExceptionHandler.getInstance();
     private transient final TextField FInput = getInputTextField(this::setF, (value) -> true); //TODO check if double
 
@@ -23,6 +23,8 @@ public class Joint extends GridPane implements Serializable {
     private Integer jointId;
     @Getter
     private Double F;
+    @Getter
+    private Boolean isSpecified = false;
 
     public Joint() {
         super();
@@ -58,16 +60,17 @@ public class Joint extends GridPane implements Serializable {
             double fieldValue = 0d;
             try {
                 fieldValue = Double.parseDouble(newValue);
+                isSpecified = true;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                isSpecified = false;
             }
 
             if (function.apply(fieldValue)) {
                 consumer.accept(fieldValue);
                 drawer.draw();
             } else {
-                String message = "Неправильно введено F в узле " + this.jointId;
-                exceptionHandler.handle(new IllegalArgumentException(message));
+                exceptionHandler.handle(new IllegalArgumentException("Неправильно указано значение F в узле " + this.jointId));
                 textField.setText("");
             }
         });
@@ -82,5 +85,4 @@ public class Joint extends GridPane implements Serializable {
     public void setJointId(Integer jointId) {
         this.jointId = jointId;
     }
-
 }

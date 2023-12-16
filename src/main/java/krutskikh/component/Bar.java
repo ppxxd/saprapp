@@ -32,6 +32,8 @@ public class Bar extends GridPane implements Serializable {
     private Joint leftJoint; //Левая заделка
     @Getter
     private Joint rightJoint; //Правая заделка
+    @Getter
+    private Boolean isQSpecified = false; //Записано Q или нет
 
     private transient final Drawer drawer = Drawer.getInstance();
     private transient final ExceptionHandler exceptionHandler = ExceptionHandler.getInstance();
@@ -92,23 +94,24 @@ public class Bar extends GridPane implements Serializable {
             try {
                 fieldValue = Double.parseDouble(newValue);
             } catch (Exception e) {
+                if (fieldName.equals("Q")) {
+                    isQSpecified = false;
+                }
                 System.out.println(e.getMessage());
             }
-//            if (isNumeric(newValue)) {
-//                try {
-//                    fieldValue = Double.parseDouble(newValue);
-//                } catch (Exception e) {
-//                    System.out.println(e.getMessage());
-//                }
-//            }
 
             if (function.apply(fieldValue)) {
+                if (fieldName.equals("Q") && !QInput.getText().isEmpty()) {
+                    isQSpecified = true;
+                }
                 consumer.accept(fieldValue);
                 drawer.draw();
             } else {
                 String message = "Неправильно введено " + fieldName + " в стержне " + this.barId;
                 exceptionHandler.handle(new IllegalArgumentException(message));
                 textField.setText("");
+                consumer.accept(0d);
+                drawer.draw();
             }
         });
 
@@ -145,10 +148,6 @@ public class Bar extends GridPane implements Serializable {
 
     public void setLeftJoint(Joint leftJoint) {
         this.leftJoint = leftJoint;
-    }
-
-    public Double getSigma() {
-        return sigma;
     }
 
     public void setRightJoint(Joint rightJoint) {
