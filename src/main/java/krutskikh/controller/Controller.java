@@ -36,7 +36,7 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<CalculatorResult, Double> xValue, Nx, Ux, sigmaX;
     @FXML
-    private TextField samplingStep, barIndexes;
+    private TextField samplingStep, x, barIndexes;
     private final MainService service = new MainService();
     private final Drawer drawer = Drawer.getInstance();
     private final FileChooser fileChooser = new FileChooser();
@@ -178,20 +178,33 @@ public class Controller implements Initializable {
 
     @FXML
     public void doCalculation() {
-        try {
-            resultsView.getItems().clear();
-            calculationExceptionsHandler.doCalculationExceptionHandler(barIndexes.getText(), samplingStep.getText(), construction);
-            double barIndex = Double.parseDouble(barIndexes.getText());
-            double step = Double.parseDouble(samplingStep.getText());
-            int stepPrecision = getNumberPrecision(samplingStep.getText());
-            Processor processor = new Processor();
-            List<CalculatorResult> resultList = processor.calculate(construction, (int) barIndex - 1, step, stepPrecision);
-            resultsView.getItems().addAll(resultList);
-        } catch (Throwable  e) {
-            System.out.println("error:");
-            System.out.println(e.getMessage());
+        resultsView.getItems().clear();
+        if (!x.getText().isEmpty()) {
+            try {
+                calculationExceptionsHandler.doCalculationExceptionHandler(x.getText(), construction);
+                double X = Double.parseDouble(x.getText());
+                Processor processor = new Processor();
+                CalculatorResult result = processor.calculate(construction, X);
+                resultsView.getItems().addAll(result);
+            } catch (Throwable e) {
+                System.out.println("error in X calculation:");
+                System.out.println(e.getMessage());
+            }
+        } else {
+            try {
+                calculationExceptionsHandler.doCalculationExceptionHandler(barIndexes.getText(), samplingStep.getText(), construction);
+                double barIndex = Double.parseDouble(barIndexes.getText());
+                double step = Double.parseDouble(samplingStep.getText());
+                int stepPrecision = getNumberPrecision(samplingStep.getText());
+                Processor processor = new Processor();
+                List<CalculatorResult> resultList = processor.calculate(construction, (int) barIndex - 1, step, stepPrecision);
+                resultsView.getItems().addAll(resultList);
+            } catch (Throwable e) {
+                System.out.println("error in Bar calculation:");
+                System.out.println(e.getMessage());
+            }
+            draw();
         }
-        draw();
     }
 
     @FXML

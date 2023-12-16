@@ -93,13 +93,15 @@
                                                         </ScrollPane>
                                                         <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="90.0" spacing="10.0" HBox.hgrow="NEVER">
                                                             <children>
+<!--                                                                Если расчет в точке, то есть введена точка, то просто по старой кнопке считаем-->
                                                                 <Button mnemonicParsing="false" onAction="#doCalculation" text="Расчёт" textAlignment="CENTER"/>
                                                                 <Button mnemonicParsing="false" onAction="#saveCalculation" text="Сохранить" textAlignment="CENTER"/>
                                                                 <Text text="Стержень"></Text>
                                                                 <TextField fx:id="barIndexes"></TextField>
                                                                 <Text text="Шаг"></Text>
                                                                 <TextField fx:id="samplingStep"></TextField>
-<!--                                                                <Button mnemonicParsing="false" onAction="#processCalculation" text="Постпроцессор" textAlignment="CENTER"/>-->
+                                                                <Text text="Точка"></Text>
+                                                                <TextField fx:id="x"></TextField>
                                                             </children>
                                                         </VBox>
                                                     </children>

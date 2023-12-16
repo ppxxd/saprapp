@@ -16,7 +16,36 @@ public class CalculationExceptionsHandler {
         return INSTANCE;
     }
 
-    public void doCalculationExceptionHandler(String barIndexes, String samplingStep, Construction construction) throws Exception {
+    public void doCalculationExceptionHandler(String x, Construction construction) throws Exception {
+        if (x.isEmpty()) {
+            exceptionHandler.handle(new IllegalArgumentException("Необходимо указать точку!"));
+            throw new Exception();
+        }
+        try { //Если вместо точки написан бред
+            Double.parseDouble(x);
+        } catch (Throwable e) {
+            exceptionHandler.handle(new IllegalArgumentException("Неправильно записана точка"));
+            throw new Exception();
+        }
+        Double lengthSum = 0d;
+        for (Bar bar : construction.getBars()) {
+            lengthSum += bar.getL();
+        }
+        if (Double.parseDouble(x) > lengthSum) { //Если больше длины конструкции
+            exceptionHandler.handle(new IllegalArgumentException("Координата точки не должна превышать длину" +
+                    " конструкции!"));
+            throw new Exception();
+        } else if (Double.parseDouble(x) < 0) { //Если меньше 0
+            exceptionHandler.handle(new IllegalArgumentException("Координата точки не должна быть меньше 0!"));
+            throw new Exception();
+        }
+
+        checkJointHandler(construction);
+        checkBarHandler(construction);
+    }
+
+    public void doCalculationExceptionHandler(String barIndexes, String samplingStep, Construction construction)
+            throws Exception {
         if (barIndexes.isEmpty()) { //Если стержень не указан
             exceptionHandler.handle(new IllegalArgumentException("Необходимо указать номер стержня!"));
             return;
@@ -50,6 +79,20 @@ public class CalculationExceptionsHandler {
             return;
         }
 
+        checkBarHandler(construction);
+        checkJointHandler(construction);
+    }
+
+    private void checkJointHandler(Construction construction) {
+        for (Joint joint : construction.getJoints()) { //Если в узле нет какой-то из сил
+            if (!joint.getIsSpecified()) {
+                exceptionHandler.handle(new IllegalArgumentException("Не указано значение силы в узле " + joint.getJointId() + "!"));
+                return;
+            }
+        }
+    }
+
+    private void checkBarHandler(Construction construction) throws Exception {
         for (Bar bar : construction.getBars()) {
             if (bar.getL() == 0) {
                 exceptionHandler.handle(new IllegalArgumentException("Не указана длина в " + bar.getBarId() + " стержне!"));
@@ -65,13 +108,6 @@ public class CalculationExceptionsHandler {
                 return;
             } else if (bar.getSigma() == 0) {
                 exceptionHandler.handle(new IllegalArgumentException("Не указано допускаемое напряжение в " + bar.getBarId() + " стержне!"));
-                return;
-            }
-        }
-
-        for (Joint joint : construction.getJoints()) { //Если в узле нету какой-то из сил
-            if (!joint.getIsSpecified()) {
-                exceptionHandler.handle(new IllegalArgumentException("Не указано силы значение в узле " + joint.getJointId() + "!"));
                 return;
             }
         }

@@ -109,13 +109,14 @@ public class Processor {
 
     }
 
-    public CalculatorResult calculate(Construction constructor, double x) {
-
+    public CalculatorResult calculate(Construction construction, double x) {
+        process(construction);
         double test = 0;
-        for (int i = 0; i <= constructor.getBars().size(); i++) {
-            test += constructor.getBars().get(i).getL();
-            if (x <= test)
+        for (int i = 0; i < construction.getBars().size(); i++) {
+            test += construction.getBars().get(i).getL();
+            if (x <= test) {
                 return new CalculatorResult(x, sigmaTotal.get(i).calculate(x), nxTotal.get(i).calculate(x), uxTotal.get(i).calculate(x));
+            }
         }
         return null;
     }

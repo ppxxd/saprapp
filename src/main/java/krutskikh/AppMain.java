@@ -12,8 +12,8 @@ public class AppMain extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(AppMain.class.getResource("preproc-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
+        stage.setMinWidth(900);
+        stage.setMinHeight(700);
         stage.setTitle("Krutskikh IDB-21-10");
         stage.show();
     }
