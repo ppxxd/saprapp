@@ -48,35 +48,35 @@ public class CalculationExceptionsHandler {
             throws Exception {
         if (barIndexes.isEmpty()) { //Если стержень не указан
             exceptionHandler.handle(new IllegalArgumentException("Необходимо указать номер стержня!"));
-            return;
+            throw new Exception();
         }
         try { //Если вместо стержня написан бред
             Double.parseDouble(barIndexes);
         } catch (Throwable e) {
             exceptionHandler.handle(new IllegalArgumentException("Неправильно введён номер стержня"));
-            return;
+            throw new Exception();
         }
         if (Double.parseDouble(barIndexes) > construction.getBars().size()) { //Если больше их кол-ва
             exceptionHandler.handle(new IllegalArgumentException("Номер стержня не должен превышать их количество!"));
-            return;
+            throw new Exception();
         } else if (Double.parseDouble(barIndexes) <= 0) { //Если меньше или равен 0
             exceptionHandler.handle(new IllegalArgumentException("Номер стержня не должен быть меньше 1!"));
-            return;
+            throw new Exception();
         }
 
         if (samplingStep.isEmpty()) { //Если не указан шаг
             exceptionHandler.handle(new IllegalArgumentException("Необходимо указать шаг!"));
-            return;
+            throw new Exception();
         }
         try { //Если вместо шага написан бред
             Double.parseDouble(samplingStep);
         } catch (Throwable e) {
             exceptionHandler.handle(new IllegalArgumentException("Неправильно введён номер стержня"));
-            return;
+            throw new Exception();
         }
         if (Double.parseDouble(samplingStep) <= 0) { //Если не указан шаг
             exceptionHandler.handle(new IllegalArgumentException("Шаг должен быть больше 0!"));
-            return;
+            throw new Exception();
         }
 
         checkBarHandler(construction);

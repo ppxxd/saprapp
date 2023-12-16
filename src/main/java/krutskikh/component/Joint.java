@@ -1,6 +1,5 @@
 package krutskikh.component;
 
-import krutskikh.calculation.CalculationExceptionsHandler;
 import krutskikh.service.Drawer;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
