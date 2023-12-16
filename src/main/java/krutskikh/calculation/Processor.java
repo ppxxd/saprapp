@@ -15,9 +15,6 @@ import java.util.stream.Collectors;
 import static org.apache.commons.math3.linear.MatrixUtils.createRealMatrix;
 
 public class Processor {
-    private String NX_FORMATTER = "N%dx: (%f * x) + (%f)";
-    private String SIGMA_FORMATTER = "σ%dx: (%f * x) + (%f)";
-    private String UX_FORMATTER = "U%dx: (%f * x^2) + (%f * x) + (%f)";
     public final List<NxCalculate> nxTotal = new ArrayList<>();
     public final List<SigmaCalculate> sigmaTotal = new ArrayList<>();
     public final List<UXCalculate> uxTotal = new ArrayList<>();
@@ -26,11 +23,11 @@ public class Processor {
         nxTotal.clear();
         sigmaTotal.clear();
         uxTotal.clear();
-        String processedValue = calculate(construction); //получаем тут уравнения
+        calculate(construction);
     }
 
     //расчет уравнений
-    public String calculate(Construction construction) {
+    public void calculate(Construction construction) {
         int nodeCount = construction.getJoints().size();
         int barCount = nodeCount - 1;
         List<Double> elasticMods = construction.getBars().stream().map(Bar::getE).collect(Collectors.toList());
@@ -97,8 +94,11 @@ public class Processor {
             double nxb = calculateNxb(elasticity, area, length, uZeros[idx], uLengths[idx], barLoads[idx]);
             double uxa = calculateUxa(elasticity, area, barLoads[idx]);
             double uxb = calculateUxb(elasticity, area, length, uZeros[idx], uLengths[idx], barLoads[idx]);
+            String SIGMA_FORMATTER = "σ%dx: (%f * x) + (%f)";
             builder.append(String.format(SIGMA_FORMATTER, idx + 1, -barLoads[idx] / areas.get(idx), nxb / areas.get(idx))).append("\n");
+            String NX_FORMATTER = "N%dx: (%f * x) + (%f)";
             builder.append(String.format(NX_FORMATTER, idx + 1, -barLoads[idx], nxb)).append("\n");
+            String UX_FORMATTER = "U%dx: (%f * x^2) + (%f * x) + (%f)";
             builder.append(String.format(UX_FORMATTER, idx + 1, uxa, uxb, uZeros[idx])).append("\n");
             uxTotal.add(new UXCalculate(uxa, uxb, uZeros[idx]));
             sigmaTotal.add(new SigmaCalculate(-barLoads[idx] / areas.get(idx), nxb / areas.get(idx)));
@@ -106,7 +106,6 @@ public class Processor {
 
         }
         System.out.println(builder);
-        return builder.toString();
 
     }
 
@@ -124,9 +123,13 @@ public class Processor {
     //получаем здесь список со всеми расчетами значит
     public List<CalculatorResult> calculate(Construction construction, Integer ind, double step, int xPrecision) {
         process(construction);
+        if (nxTotal.isEmpty() || uxTotal.isEmpty() || sigmaTotal.isEmpty()) {
+            System.out.print(nxTotal.isEmpty());
+            System.out.println(uxTotal.isEmpty());
+            System.out.println(sigmaTotal.isEmpty());
+        }
         List<CalculatorResult> results = new ArrayList<>();
         for (double i = 0; Precision.round(i, xPrecision) <= construction.getBars().get(ind).getL(); i += step) {
-//TODO SIGMA NX UX SIZE 0
             results.add(new CalculatorResult(Precision.round(i, xPrecision), sigmaTotal.get(ind).calculate(i), nxTotal.get(ind).calculate(i), uxTotal.get(ind).calculate(i)));
         }
         return results;

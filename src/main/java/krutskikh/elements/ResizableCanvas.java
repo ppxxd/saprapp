@@ -9,7 +9,7 @@ import java.io.IOException;
 public class ResizableCanvas extends Canvas {
     private final Drawer drawer = Drawer.getInstance();
 
-    public ResizableCanvas(){
+    public ResizableCanvas() {
         widthProperty().addListener(evt -> {
             try {
                 draw();
@@ -26,7 +26,7 @@ public class ResizableCanvas extends Canvas {
         });
     }
 
-    private void draw() throws IOException{
+    private void draw() throws IOException {
         double width = getWidth();
         double height = getHeight();
 
