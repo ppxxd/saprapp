@@ -23,24 +23,24 @@ public class MainService {
         }
     }
 
-    public void save(String calculationFile, File file) {
-//        try {
-//            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-//            writer.write("Перемещения: " + calculationFile.getMoving() + "\n");
-//            writer.write("Продольные силы:" + calculationFile.getLongitudinalStrong() + "\n");
-//            writer.write("Нормальные напряжения:" + calculationFile.getNormalVoltage() + "\n");
-//            writer.close();
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path)))
-//        {
-//            oos.writeObject(calculationFile);
-//        }
-//        catch(Exception ex) {
-//            System.out.println(ex.getMessage());
-//        }
-    }
+//    public void save(String calculationFile, File file) {
+////        try {
+////            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+////            writer.write("Перемещения: " + calculationFile.getMoving() + "\n");
+////            writer.write("Продольные силы:" + calculationFile.getLongitudinalStrong() + "\n");
+////            writer.write("Нормальные напряжения:" + calculationFile.getNormalVoltage() + "\n");
+////            writer.close();
+////        } catch (IOException e) {
+////            System.out.println(e.getMessage());
+////        }
+////        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path)))
+////        {
+////            oos.writeObject(calculationFile);
+////        }
+////        catch(Exception ex) {
+////            System.out.println(ex.getMessage());
+////        }
+//    }
 
     public Construction load() {
         Construction construction = new Construction();

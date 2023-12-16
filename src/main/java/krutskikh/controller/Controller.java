@@ -1,28 +1,33 @@
 package krutskikh.controller;
 
-import javafx.scene.control.*;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Window;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import krutskikh.calculation.CalculatorResult;
 import krutskikh.calculation.Processor;
 import krutskikh.component.Bar;
 import krutskikh.component.Construction;
 import krutskikh.component.Joint;
 import krutskikh.service.Drawer;
-import krutskikh.calculation.Storage;
 import krutskikh.service.MainService;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.StringJoiner;
 
 public class Controller implements Initializable {
     @FXML
@@ -30,12 +35,11 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<CalculatorResult, Double> xValue, Nx, Ux, sigmaX;
     @FXML
-    private TextField samplingStep, x, barIndexes;
+    private TextField samplingStep, barIndexes;
     private final MainService service = new MainService();
     private final Drawer drawer = Drawer.getInstance();
     private final FileChooser fileChooser = new FileChooser();
     private Construction construction;
-    private final Storage storage = Storage.INSTANCE;
 
     @FXML
     private BorderPane root;
@@ -43,8 +47,6 @@ public class Controller implements Initializable {
     private VBox jointHolder;
     @FXML
     private VBox barHolder;
-    @FXML
-    private VBox calcHolder;
     @FXML
     private Canvas canvas;
     @FXML

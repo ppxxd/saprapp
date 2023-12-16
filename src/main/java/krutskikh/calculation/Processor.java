@@ -105,6 +105,7 @@ public class Processor {
             nxTotal.add(new NxCalculate(-barLoads[idx], nxb));
 
         }
+        System.out.println(builder);
         return builder.toString();
 
     }

@@ -1,6 +1,9 @@
 package krutskikh.calculation;
 
 
+import lombok.Getter;
+
+@Getter
 public class CalculatorResult {
     private double x;
     private double sigma;
@@ -28,22 +31,6 @@ public class CalculatorResult {
 
     public void setUX(double UX) {
         this.UX = UX;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getSigma() {
-        return sigma;
-    }
-
-    public double getNX() {
-        return NX;
-    }
-
-    public double getUX() {
-        return UX;
     }
 
 }
