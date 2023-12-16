@@ -9,7 +9,6 @@ module krutskikh {
 
     requires commons.math3;
     requires lombok;
-    requires com.google.gson;
 
     opens krutskikh to javafx.fxml;
     exports krutskikh;
