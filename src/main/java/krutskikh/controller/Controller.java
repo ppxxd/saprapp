@@ -2,6 +2,8 @@ package krutskikh.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
@@ -12,14 +14,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import krutskikh.calculation.CalculationExceptionsHandler;
 import krutskikh.calculation.CalculatorResult;
 import krutskikh.calculation.Processor;
 import krutskikh.component.Bar;
 import krutskikh.component.Construction;
 import krutskikh.component.Joint;
+import krutskikh.service.PlotCreator;
 import krutskikh.service.Drawer;
+import krutskikh.service.GraphCreator;
 import krutskikh.service.MainService;
+import krutskikh.service.impl.PlotCreatorIntrf;
+import krutskikh.service.impl.GraphCreatorIntrf;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,7 +48,10 @@ public class Controller implements Initializable {
     private final Drawer drawer = Drawer.getInstance();
     private final FileChooser fileChooser = new FileChooser();
     private Construction construction;
-    private transient final CalculationExceptionsHandler calculationExceptionsHandler = CalculationExceptionsHandler.getInstance();
+    private transient final CalculationExceptionsHandler calculationExceptionsHandler
+            = CalculationExceptionsHandler.getInstance();
+    private final GraphCreator graphCreator = new GraphCreatorIntrf();
+    private final PlotCreator plotCreator = new PlotCreatorIntrf();
 
     @FXML
     private BorderPane root;
@@ -255,6 +265,49 @@ public class Controller implements Initializable {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @FXML
+    public void drawGraph() {
+        try {
+            calculationExceptionsHandler.doCalculationExceptionHandler(barIndexes.getText(), samplingStep.getText(), construction);
+            int barIndex = (int) tryParseDouble(barIndexes.getText());
+            double step = tryParseDouble(samplingStep.getText());
+            int stepPrecision = getNumberPrecision(samplingStep.getText());
+            double barLength = construction.getBars().get(barIndex - 1).getL();
+            Group group = graphCreator.create(construction, barIndex - 1, step, barLength, stepPrecision);
+            Scene scene = new Scene(group);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("График");
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("error in Graph:");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void drawPlot() {
+        try {
+            calculationExceptionsHandler.doCalculationExceptionHandler(barIndexes.getText(), samplingStep.getText(), construction);
+            double step = tryParseDouble(samplingStep.getText());
+            int stepPrecision = getNumberPrecision(samplingStep.getText());
+            double[] barLengths = construction.getBars().stream().mapToDouble(Bar::getL).toArray();
+            Group group = plotCreator.create(construction, step, stepPrecision, barLengths);
+            Scene scene = new Scene(group);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Эпюр");
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("error in Plot:");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private double tryParseDouble(String number) {
+        return Double.parseDouble(number);
     }
 
 }
