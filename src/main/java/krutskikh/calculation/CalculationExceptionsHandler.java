@@ -71,7 +71,7 @@ public class CalculationExceptionsHandler {
         try { //Если вместо шага написан бред
             Double.parseDouble(samplingStep);
         } catch (Throwable e) {
-            exceptionHandler.handle(new IllegalArgumentException("Неправильно введён номер стержня"));
+            exceptionHandler.handle(new IllegalArgumentException("Неправильно введён шаг"));
             throw new Exception();
         }
         if (Double.parseDouble(samplingStep) <= 0) { //Если не указан шаг
