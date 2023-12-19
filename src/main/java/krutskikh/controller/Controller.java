@@ -136,6 +136,9 @@ public class Controller implements Initializable {
 //        }
 
         File file = fileChooser.showOpenDialog(root.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
         service.setPath(file.getAbsolutePath());
 
         if (service.getPath() != null) {
