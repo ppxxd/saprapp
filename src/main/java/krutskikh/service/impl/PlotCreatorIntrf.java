@@ -1,5 +1,6 @@
 package krutskikh.service.impl;
 
+import javafx.scene.Node;
 import krutskikh.component.Construction;
 import krutskikh.service.PlotCreator;
 import krutskikh.calculation.Processor;
@@ -22,11 +23,14 @@ public class PlotCreatorIntrf implements PlotCreator {
         AreaChart<Number, Number> nxArea = new AreaChart<>(new NumberAxis(), new NumberAxis());
         AreaChart<Number, Number> OxArea = new AreaChart<>(new NumberAxis(), new NumberAxis());
         AreaChart<Number, Number> uxArea = new AreaChart<>(new NumberAxis(), new NumberAxis());
+        XYChart.Series<Number, Number> nxSeries = null;
+        XYChart.Series<Number, Number> OxSeries = null;
+        XYChart.Series<Number, Number> uxSeries = null;
         double leftBorder = 0.0;
         for (int i = 0; i < barLengths.length; i++) {
-            XYChart.Series<Number, Number> nxSeries = new XYChart.Series<>();
-            XYChart.Series<Number, Number> OxSeries = new XYChart.Series<>();
-            XYChart.Series<Number, Number> uxSeries = new XYChart.Series<>();
+            nxSeries = new XYChart.Series<>();
+            OxSeries = new XYChart.Series<>();
+            uxSeries = new XYChart.Series<>();
             List<CalculatorResult> resultList = processor.calculate(construction, i, samplingStep, stepPrecision);
             for (CalculatorResult result : resultList) {
                 nxSeries.getData().add(new XYChart.Data<>(leftBorder + result.getX(), result.getNX()));
@@ -48,6 +52,12 @@ public class PlotCreatorIntrf implements PlotCreator {
         Tab oxTab = new Tab("∂x", uxArea);
         oxTab.setClosable(false);
         TabPane tabPane = new TabPane(nxTab, uxTab, oxTab);
+        Node node = nxArea.lookup(".default-color0.chart-series-area-fill");
+        node.setStyle("-fx-fill: #336699;");
+        node = OxArea.lookup(".default-color0.chart-series-area-fill");
+        node.setStyle("-fx-fill: #336699;");
+        node = uxArea.lookup(".default-color0.chart-series-area-fill");
+        node.setStyle("-fx-fill: #336699;");
         return new Group(tabPane);
     }
 }

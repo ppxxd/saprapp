@@ -39,9 +39,15 @@ public class GraphCreatorIntrf implements GraphCreator {
         nxSeries.setName(String.valueOf(barIndex + 1));
         OxSeries.setName(String.valueOf(barIndex + 1));
         uxSeries.setName(String.valueOf(barIndex + 1));
+
         nxChart.getData().add(nxSeries);
         OxChart.getData().add(OxSeries);
         uxChart.getData().add(uxSeries);
+
+        nxSeries.getNode().setStyle("-fx-stroke: #336699; ");
+        OxSeries.getNode().setStyle("-fx-stroke: #336699; ");
+        uxSeries.getNode().setStyle("-fx-stroke: #336699; ");
+
         Tab nxTab = new Tab("Nx", nxChart);
         Tab uxTab = new Tab("Ux", OxChart);
         Tab oxTab = new Tab("∂x", uxChart);
